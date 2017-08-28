@@ -9,6 +9,7 @@ sudo /etc/init.d/nginx restart
 sudo apt update
 sudo apt remove python-django -y
 sudo apt remove gunicorn -y
+sudo apt install mc -y
 sudo apt install python3-pip -y
 sudo apt install python2.7 -y
 sudo apt install supervisor -y
