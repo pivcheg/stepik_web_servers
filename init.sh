@@ -8,10 +8,10 @@ sudo /etc/init.d/nginx restart
 #﻿sudo /etc/init.d/mysql restart﻿
 sudo apt update
 sudo apt remove python-django -y
-sudo apt remove gunicorn
+sudo apt remove gunicorn -y
 sudo apt install python3-pip -y
-sudo apt install supervisor - y
-sudo apt install python2.7 - y
+sudo apt install python2.7 -y
+sudo apt install supervisor -y
 sudo pip3 install gunicorn
 sudo pip3 install django
 sudo ln -s /home/box/web/etc/supervisor.conf /etc/supervisor/conf.d/ask.conf
