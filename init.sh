@@ -20,3 +20,7 @@ sudo ln -s /home/box/web/etc/ask.conf /etc/supervisor/conf.d/ask.conf
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl restart ask
+mysql -u root -e "create database ask"
+mysql -u root -e "create user askuser@localhost IDENTIFIED BY 'pass'"
+mysql -u root -e "GRANT ALL ON ask.* TO askuser@localhost"
+mysql -u root -e "FLUSH PRIVILEGES"
