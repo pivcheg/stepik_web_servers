@@ -17,7 +17,7 @@ sudo pip3 install django
 sudo cp /home/box/web/etc/supervisord.conf /etc/supervisor/supervisord.conf
 sudo ln -s /home/box/web/etc/ask.conf /etc/supervisor/conf.d/ask.conf
 sudo service supervisor start
-﻿sudo service mysql start﻿
+sudo service mysql start
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl restart ask
