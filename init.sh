@@ -5,7 +5,6 @@ sudo /bin/ln -s /home/box/web/etc/nginx.conf /etc/nginx/sites-enabled/test.conf
 sudo service nginx restart
 #sudo /bin/ln -s /home/box/web/etc/gunicorn.conf /etc/gunicorn.d/test
 #sudo /etc/init.d/gunicorn restart
-﻿sudo service mysql restart﻿
 sudo apt update
 sudo apt remove python-django -y
 sudo apt remove gunicorn -y
@@ -18,6 +17,7 @@ sudo pip3 install django
 sudo cp /home/box/web/etc/supervisord.conf /etc/supervisor/supervisord.conf
 sudo ln -s /home/box/web/etc/ask.conf /etc/supervisor/conf.d/ask.conf
 sudo service supervisor start
+﻿sudo service mysql start﻿
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl restart ask
