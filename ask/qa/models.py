@@ -20,4 +20,4 @@ class Answer(models.Model):
     text = models.TextField(blank=False)
     added_at = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question, blank=False, on_delete=models.PROTECT)
-    author = models.ForeignKey(User, blank=False)
+    author = models.ForeignKey(User, blank=False, default='x')
