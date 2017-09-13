@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ block.super }} - {{ question.title }}
+{% endblock %}
+{% block content %}
+    <h1>{{ question.title }}</h1>
+    <div class="question_details">
+        <p>{{ question.text }}</p>
+        <div class="comments">
+            {% for answer in answers %}
+                <p>{{ answer.text }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

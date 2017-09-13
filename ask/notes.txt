@@ -1,0 +1,30 @@
+MVC			Django
+Model		Model
+Router		urls.py
+Controller	views
+View		templates
+
+
+Django			SQL
+класс модели	таблица
+объект модели	строка таблицы
+QuerySet		запрос
+
+
+Основные файлы проекта:
+manage.py - скрипт управления проектом
+project/settings.py - настройки
+project/urls.py - router, список URL проекта
+project/wsgi.py - WSGI приложение, точка входа
+app_name - Django приложение
+
+
+Основные файлы приложения:
+models.py - файл с моделями, бизнес-логика
+views.py - контроллеры
+urls.py - URL роутер данного приложения
+templates - директория с шаблонами
+management/commands - консольные команды приложения
+static - CSS, JavaScript, картинки
+migrations - миграции для обновления базы данных
+

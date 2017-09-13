@@ -140,11 +140,14 @@ class TestAnswer(unittest.TestCase):
         user, _ = User.objects.get_or_create(
             username='x',
             defaults={'password': 'y', 'last_login': timezone.now()})
-        question = Question.objects.create(title='qwe', text='qwe', author=user)
+        question = Question.objects.create(title='TestAnswer title', text='TestAnswer text', author=user)
+        #question = Question(id=11, title='TestAnswer title', text='TestAnswer text', author=user)
+
 
         try:
-            answer = Answer(text='qwe', question=question, author=user)
+            answer = Answer(text='Very important answer', question=question, author=user)
             question.save()
+            answer.save()
         except:
             assert False, "Failed to create answer model, check db connection"
 
