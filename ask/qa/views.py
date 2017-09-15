@@ -74,8 +74,8 @@ def ask(request):
 
 def popular(request):
     questions = models.Question.objects.popular()
-    return questions_list_on_page(request, questions, "popular.html")
+    return questions_list_on_page(request, questions, "questions_popular.html")
 
 def new(request):
     questions = models.Question.objects.new()
-    return questions_list_on_page(request, questions, "new.html")
+    return questions_list_on_page(request, questions, "questions_new.html")

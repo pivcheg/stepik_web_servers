@@ -14,7 +14,7 @@ sudo apt install python2.7 -y
 sudo apt install supervisor -y
 sudo pip3 install gunicorn
 sudo pip3 install django
-sudo pip2 uninstall django
+sudo pip2 uninstall django -y
 sudo pip2 install django
 sudo cp /home/box/web/etc/supervisord.conf /etc/supervisor/supervisord.conf
 sudo ln -s /home/box/web/etc/ask.conf /etc/supervisor/conf.d/ask.conf
