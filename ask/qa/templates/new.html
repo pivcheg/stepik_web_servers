@@ -1,0 +1,5 @@
+{% extends "questions_paginator.html" %}
+
+{% block pages %}
+<li><a href="{% url 'new' %}?page={{ p }}">page {{ p }}</a>
+{% endblock %}

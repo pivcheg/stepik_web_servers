@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ block.super }} - главная
+{% endblock %}
+
+{% block content %}
+<h6><a href="{% url 'popular' %}"> Популярные</a> <a href="{% url 'new' %}">Новые</a></h6>
+<nav>
+    <ul class="paginator">
+
+    {% for question in questions_on_page %}
+        <div class="question">
+            {# <a href="{{ question.build_url }}">{{ question }}</a> #}
+            <h4><a href="{% url 'question_details' question.id %}">{{ question }}</a></h4>
+        </div>
+    {% endfor %}
+
+    {% for p in paginator.page_range %}
+        {% if p == page.number %}
+            <li class="active">page {{ p }}
+        {% else %}
+
+            {% block pages %}
+            <li><a href="/?page={{ p }}">page {{ p }}</a>
+            {% endblock %}
+
+        {% endif %}
+
+            </li>
+    {% endfor %}
+
+    </ul>
+</nav>
+{% endblock %}
