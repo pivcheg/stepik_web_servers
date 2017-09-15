@@ -62,6 +62,7 @@ def signup(request):
 def question_detail(request, qid):
     question = get_object_or_404(models.Question, id=qid)
     answers = models.Answer.objects.filter(question=qid)
+    # answers = models.Answer.question_set.all()
     #likes = question.likes.all()
 
     return render(request, "question_details.html", {
