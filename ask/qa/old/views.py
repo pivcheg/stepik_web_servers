@@ -37,14 +37,27 @@ def home(request):
 def questions_list_on_page(request, questions_queryset=models.Question.objects.order_by('id'),
                            template="questions_paginator.html"):
     """Функция принимает отсортированный queryset (если не указан, тогда сортирует по id),
-    вызывает функцию paginate, разбивает вопросы на страницы и возвращает html текст
-    используя переданный шаблон."""
+    а затем разбивает его на страницы используя произвольные шаблоны"""
 
     paginator, page = paginate(request, questions_queryset)
+    # paginator.baseurl = reverse(reverse_url)
     return render(request, template, {
         'questions_on_page': page.object_list,
         'paginator': paginator,
         'page': page
+    })
+
+def add_question(request):
+    if request.method == "POST":
+        form = forms.AskForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            url = post.get_url()
+            return HttpResponseRedirect(url)
+    else:
+        form = forms.AskForm()
+    return render(request, "question_add.html", {
+        'form': form
     })
 
 def login(request):
@@ -53,23 +66,12 @@ def login(request):
 def signup(request):
     return HttpResponse(request)
 
-def add_comment(request):
-    if request.method == "POST":
-        form = forms.AnswerForm(request.POST)
-        if form.is_valid():
-            answer = form.save()
-            url = answer.get_url()
-            return HttpResponseRedirect(url)
-    else:
-        form = forms.AnswerForm()
-    return render(request, "question_details.html", {
-        'form': form
-    })
-
-#@require_GET
+@require_GET
 def question_detail(request, qid):
     question = get_object_or_404(models.Question, id=qid)
     answers = models.Answer.objects.filter(question=qid)
+    # answers = models.Answer.question_set.all()
+    # likes = question.likes.all()
 
     return render(request, "question_details.html", {
         'question': question,
@@ -90,8 +92,6 @@ def add_question(request):
     return render(request, "question_add.html", {
         'form': form
     })
-
-
 
 def popular_questions(request):
     questions = models.Question.objects.popular()

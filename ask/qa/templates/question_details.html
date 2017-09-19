@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block content %}
+
     <h1>{{ question.title }}</h1>
+
     <div class="question_details">
         <p>Автор: {{ question.author }}</p>
         <p>Вопрос: {{ question.text }}</p>
@@ -13,16 +15,39 @@
         <p>Рейтинг: {{ question.rating }}</p>
         <div class="likes">
             <p>Понравилось:
+
             {% for like in question.likes.all %}
                 {{ like }},
             {% endfor %}
+
             </p>
         </div>
-        <div class="comments">
-            {% for answer in answers %}
-                <p>Автор комментария: {{ answer.author }}</p>
-                <p>Комментарий: {{ answer.text }}</p>
-            {% endfor %}
-        </div>
     </div>
+
+    <h4>Написать комментарий</h4>
+    <form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
+        {% csrf_token %}
+        <fieldset>
+
+            {% for field in form %}
+                <div class="control-group {% if field.errors %}has-error{% endif %}">
+                    <label class="control-label">{{ field.label }}</label>
+                    <div class="controls">{{ field }}</div>
+                </div>
+            {% endfor %}
+
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </div>
+    </form>
+
+    <div class="comments">
+        {% for answer in answers %}
+            <p>Автор комментария: {{ answer.author }}</p>
+            <p>Комментарий: {{ answer.text }}</p>
+        {% endfor %}
+    </div>
+
+
 {% endblock %}

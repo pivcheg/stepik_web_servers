@@ -1,0 +1,20 @@
+{% extends "question_details.html" %}
+
+{% block addcomment %}
+
+<form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
+    {% csrf_token %}
+    <fieldset>
+        {% for field in form %}
+            <div class="control-group {% if field.errors %}has-error{% endif %}">
+                <label class="control-label">{{ field.label }}</label>
+                <div class="controls">{{ field }}</div>
+            </div>
+        {% endfor %}
+    </fieldset>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+    </div>
+</form>
+
+{% endblock %}
