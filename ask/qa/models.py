@@ -26,7 +26,7 @@ class Question(models.Model):
 
     def get_url(self):
         return "/question/%d/" % self.id
-        #return reverse("question", kwargs={'qid': self.id})
+        #return reverse('single-question-view', kwargs={'qa_id': self.id})
 
 
 class AnswerManager(models.Manager):
@@ -38,3 +38,6 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, blank=False, on_delete=models.PROTECT)
     author = models.ForeignKey(User)
     objects = AnswerManager()
+
+    def get_url(self):
+        return "/question/%d/" % self.question.id

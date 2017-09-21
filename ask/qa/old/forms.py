@@ -30,7 +30,7 @@ class AnswerForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
     question = forms.ModelChoiceField(required=True, queryset=None)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, queryset, *args, **kwargs):
         super(AnswerForm, self).__init__(*args, **kwargs)
         self.fields['question'].queryset = models.Answer.objects.filter(question=kwargs['qid'])
 
