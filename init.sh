@@ -27,3 +27,6 @@ mysql -u root -e "create database ask"
 mysql -u root -e "create user askuser@localhost IDENTIFIED BY 'pass'"
 mysql -u root -e "GRANT ALL ON ask.* TO askuser@localhost"
 mysql -u root -e "FLUSH PRIVILEGES"
+python3 /home/box/web/ask/manage.py makemigrations
+python3 /home/box/web/ask/manage.py migrate
+sudo chmod 777 -R /home/box/web

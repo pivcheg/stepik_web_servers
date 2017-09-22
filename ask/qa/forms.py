@@ -21,8 +21,8 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
     # question = forms.ModelChoiceField(required=True, queryset=None, widget=forms.HiddenInput)
-    question = forms.IntegerField(required=False, widget=forms.HiddenInput)
-    text = forms.CharField(widget=forms.Textarea)
+    question = forms.IntegerField(required=False, widget=forms.HiddenInput, label="QID")
+    text = forms.CharField(widget=forms.Textarea, label="Комментарий")
 
     def __init__(self, *args, **kwargs):
         # print("__init__", "queryset:", quest_object, "args:", args, "kwargs", kwargs)
@@ -39,7 +39,7 @@ class AnswerForm(forms.Form):
 
     def save(self):
         print("save:", self)
-        self.cleaned_data['question'] = get_object_or_404(models.Question, id=self._qid)
+        self.cleaned_data['question'] = self._qid
         self.cleaned_data['author'], _ = models.User.objects.get_or_create(username='anon')
         answer = models.Answer(**self.cleaned_data)
         answer.save()

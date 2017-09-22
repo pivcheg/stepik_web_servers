@@ -53,26 +53,6 @@ def login(request):
 def signup(request):
     return HttpResponse(request)
 
-def add_comment(request, qid):
-    # queryset = get_object_or_404(models.Question, id=qid)
-    print("request:", request)
-    if request.method == "POST":
-        form = forms.AnswerForm(request.POST, initial={'qid': qid})
-        # form = forms.AnswerForm(request.POST)
-        if form.is_valid():
-            answer = form.save()
-            url = answer.get_url()
-            return HttpResponseRedirect(url)
-        else:
-            print("form.is_valid = FALSE")
-    else:
-        #form = forms.AnswerForm(initial={'qid': queryset})
-        form = forms.AnswerForm()
-    return render(request, "question_add_comment.html", {
-        'form': form,
-        'qid': qid
-    })
-
 #@login_required
 def add_question(request):
     if request.method == "POST":
@@ -93,11 +73,20 @@ def question_detail(request, qid):
     question = get_object_or_404(models.Question, id=qid)
     answers = models.Answer.objects.filter(question=qid)
     if request.method == "POST":
-        return add_comment(request, qid)
+        form = forms.AnswerForm(request.POST, initial={'qid': question})
+        if form.is_valid():
+            answer = form.save()
+            url = answer.get_url()
+            return HttpResponseRedirect(url)
+        else:
+            print("form.is_valid = FALSE")
+    else:
+        form = forms.AnswerForm()
 
     return render(request, "question_details.html", {
         'question': question,
         'answers': answers,
+        'form': form,
     })
 
 def popular_questions(request):
