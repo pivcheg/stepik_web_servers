@@ -24,7 +24,8 @@
         </div>
     </div>
 
-    <h4><a href="{% url 'add_comment' question.id %}">Написать комментарий</a></h4>
+    {# <h4><a href="{% url 'add_comment' question.id %}">Написать комментарий</a></h4> #}
+    <h4><a href="{% url 'add_comment'  question.id %}?qid={{ question.id }}">Написать комментарий</a></h4>
 
 
     {% block addcomment %}{% endblock %}

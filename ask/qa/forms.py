@@ -24,11 +24,14 @@ class AnswerForm(forms.Form):
     question = forms.IntegerField(required=False, widget=forms.HiddenInput)
     text = forms.CharField(widget=forms.Textarea)
 
-    def __init__(self, quest_object, *args, **kwargs):
-        print("__init__", "queryset:", quest_object, "args:", args, "kwargs", kwargs)
+    def __init__(self, *args, **kwargs):
+        # print("__init__", "queryset:", quest_object, "args:", args, "kwargs", kwargs)
         super(AnswerForm, self).__init__(*args, **kwargs)
-        # self._qid = kwargs['initial']['qid']
-        self._quest = quest_object
+        self._qid = kwargs.get('initial', None)
+        if self._qid is not None:
+            self._qid = self._qid.get('qid', None)
+        print("__init__", "self._qid:", self._qid, "args:", args, "kwargs", kwargs)
+        # self._quest = quest_object
 
     def clean_text(self):
         text = self.cleaned_data['text']
@@ -36,7 +39,7 @@ class AnswerForm(forms.Form):
 
     def save(self):
         print("save:", self)
-        self.cleaned_data['question'] = self._quest
+        self.cleaned_data['question'] = get_object_or_404(models.Question, id=self._qid)
         self.cleaned_data['author'], _ = models.User.objects.get_or_create(username='anon')
         answer = models.Answer(**self.cleaned_data)
         answer.save()

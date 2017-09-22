@@ -11,7 +11,7 @@
     <div class="alert alert-danger">{{ e }}</div>
 {% endfor %}
 
-<form class="form-horizontal" method="post" action="{% url 'add_comment' qid %}">
+<form class="form-horizontal" method="post" action="{% url 'add_comment' qid %}?qid={{ qid }}">
     {% csrf_token %}
     <fieldset>
         {% for field in form %}
