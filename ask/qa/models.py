@@ -17,7 +17,7 @@ class Question(models.Model):
     text = models.TextField(blank=False)
     added_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
-    author = models.ForeignKey(User, default=1)
+    author = models.ForeignKey(User)
     likes = models.ManyToManyField(User, related_name='question_like_user', blank=True)
 
     def __str__(self):
@@ -25,8 +25,8 @@ class Question(models.Model):
 
 
     def get_url(self):
-        return "/question/%d/" % self.id
-        #return reverse('single-question-view', kwargs={'qa_id': self.id})
+        # return "/question/%d/" % self.id
+        return reverse('question_details', kwargs={'qid': self.id})
 
 
 class AnswerManager(models.Manager):
@@ -40,4 +40,5 @@ class Answer(models.Model):
     objects = AnswerManager()
 
     def get_url(self):
-        return "/question/%d/" % self.question.id
+        # return "/question/%d/" % self.question.id
+        return reverse('question_details', kwargs={'qid': self.question.id})

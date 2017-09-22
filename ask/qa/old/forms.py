@@ -33,8 +33,30 @@ class AnswerForm(forms.Form):
     def __init__(self, queryset, *args, **kwargs):
         super(AnswerForm, self).__init__(*args, **kwargs)
         self.fields['question'].queryset = models.Answer.objects.filter(question=kwargs['qid'])
+        #self.fields['question'].qid = kwargs['initial']['qid']
+        #print("self.fields['question'].qid:", self.fields['question'].qid)
+        # print("self.fields['question']", self.fields['question'])
+
+    # def clean_quiestion(self):
+    #     print("clean_question:", self.cleaned_data['question'].qid)
+    #     question = self.cleaned_data['question'].qid
+    #     return question
+
 
     def clean(self):
         # if is_spam(self.clean_data):
         #     raise forms.ValidationError("Сообщение похоже на спам!", code="spam")
         pass
+
+
+# class AnswerForm(forms.Form):
+#     text = forms.CharField(widget=forms.Textarea)
+#     question = forms.ModelChoiceField(required=True, queryset=None)
+#
+#     def __init__(self, *args, **kwargs):
+#         super(AnswerForm, self).__init__(*args, **kwargs)
+#         #super(AnswerForm, self).__init__()
+#         self.fields['question'].queryset = args
+#
+#     def clean(self):
+#         pass

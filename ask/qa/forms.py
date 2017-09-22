@@ -13,51 +13,31 @@ class AskForm(forms.Form):
 
     def save(self):
         question = models.Question(**self.cleaned_data)
-        # question.author = models.User.objects.create_user('anon', 'anon@bay.com', 'anonpassword').save()
+        question.author, _ = models.User.objects.get_or_create(username='anon')
+        print(models.User.objects.get_or_create(username='anon'))
         question.save()
         return question
 
-    # def clean(self):
-    #     return self.cleaned_data
 
 class AnswerForm(forms.Form):
     # question = forms.ModelChoiceField(required=True, queryset=None, widget=forms.HiddenInput)
-    question = forms.IntegerField(required=True, widget=forms.HiddenInput)
+    question = forms.IntegerField(required=False, widget=forms.HiddenInput)
     text = forms.CharField(widget=forms.Textarea)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, quest_object, *args, **kwargs):
+        print("__init__", "queryset:", quest_object, "args:", args, "kwargs", kwargs)
         super(AnswerForm, self).__init__(*args, **kwargs)
-        print("__init__", "args:", args, "kwargs", kwargs)
-        self._qid = kwargs['initial']['qid']
-        #self.fields['question'].qid = kwargs['initial']['qid']
-        #print("self.fields['question'].qid:", self.fields['question'].qid)
-        # print("self.fields['question']", self.fields['question'])
+        # self._qid = kwargs['initial']['qid']
+        self._quest = quest_object
 
     def clean_text(self):
         text = self.cleaned_data['text']
         return text
 
-    def clean_quiestion(self):
-        print("clean_question:", self.cleaned_data['question'].qid)
-        question = self.cleaned_data['question'].qid
-        return question
-
     def save(self):
         print("save:", self)
-        self.cleaned_data['question'] = self._qid
-        self.cleaned_data['author_id'] = 1
+        self.cleaned_data['question'] = self._quest
+        self.cleaned_data['author'], _ = models.User.objects.get_or_create(username='anon')
         answer = models.Answer(**self.cleaned_data)
         answer.save()
         return answer
-
-# class AnswerForm(forms.Form):
-#     text = forms.CharField(widget=forms.Textarea)
-#     question = forms.ModelChoiceField(required=True, queryset=None)
-#
-#     def __init__(self, *args, **kwargs):
-#         super(AnswerForm, self).__init__(*args, **kwargs)
-#         #super(AnswerForm, self).__init__()
-#         self.fields['question'].queryset = args
-#
-#     def clean(self):
-#         pass

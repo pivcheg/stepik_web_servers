@@ -55,20 +55,18 @@ def signup(request):
 
 def add_comment(request, qid):
     queryset = get_object_or_404(models.Question, id=qid)
-    if request.method == "GET":
-        print("GET:", request.GET)
-
+    print("request:", request)
     if request.method == "POST":
-        print("POST:", request.POST)
-        form = forms.AnswerForm(request.POST, initial={'qid': queryset})
-        #if form.is_valid():
-        print("form.is_valid = True")
-        answer = form.save()
-        url = answer.get_url()
-        return HttpResponseRedirect(url)
+        #form = forms.AnswerForm(request.POST, initial={'qid': queryset})
+        form = forms.AnswerForm(queryset, request.POST)
+        if form.is_valid():
+            print("form.is_valid = True")
+            answer = form.save()
+            url = answer.get_url()
+            return HttpResponseRedirect(url)
     else:
-        form = forms.AnswerForm(initial={'qid': queryset})
-        #form = forms.AnswerForm(qid=qid)
+        #form = forms.AnswerForm(initial={'qid': queryset})
+        form = forms.AnswerForm(queryset)
     return render(request, "question_add_comment.html", {
         'form': form,
         'qid': qid
@@ -95,7 +93,6 @@ def question_detail(request, qid):
     answers = models.Answer.objects.filter(question=qid)
     if request.method == "POST":
         return add_comment(request, qid)
-    # add_comment(request, question)
 
     return render(request, "question_details.html", {
         'question': question,
