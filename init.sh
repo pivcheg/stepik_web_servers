@@ -2,7 +2,6 @@
 
 sudo rm /etc/nginx/sites-enabled/default
 sudo /bin/ln -s /home/box/web/etc/nginx.conf /etc/nginx/sites-enabled/test.conf
-sudo service nginx restart
 #sudo /bin/ln -s /home/box/web/etc/gunicorn.conf /etc/gunicorn.d/test
 #sudo /etc/init.d/gunicorn restart
 sudo apt update
@@ -20,6 +19,7 @@ sudo cp /home/box/web/etc/supervisord.conf /etc/supervisor/supervisord.conf
 sudo ln -s /home/box/web/etc/ask.conf /etc/supervisor/conf.d/ask.conf
 sudo service supervisor start
 sudo service mysql start
+sudo service nginx restart
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl restart ask

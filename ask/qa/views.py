@@ -102,7 +102,8 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             if user:
-                return HttpResponseRedirect("/")
+                return login(request)
+                # return HttpResponseRedirect("/")
             else:
                 return render(request, "user_new.html", {
                     'form': form,
