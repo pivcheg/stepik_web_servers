@@ -1,11 +1,17 @@
+# from email.policy import HTTP
+# from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+# from django.views.decorators.http import require_GET
+# import django.contrib.sessions
+# from datetime import datetime, timedelta
 from django.shortcuts import render, get_object_or_404, Http404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.http import require_GET
 from django.core.paginator import Paginator, EmptyPage
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views
+from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from . import models
 from . import forms
+
 
 def paginate(request, queryset):
     try:
@@ -34,6 +40,7 @@ def paginate(request, queryset):
 def home(request):
     return questions_list_on_page(request)
 
+
 def questions_list_on_page(request, questions_queryset=models.Question.objects.order_by('id'),
                            template="questions_paginator.html"):
     """Функция принимает отсортированный queryset (если не указан, тогда сортирует по id),
@@ -44,26 +51,83 @@ def questions_list_on_page(request, questions_queryset=models.Question.objects.o
     return render(request, template, {
         'questions_on_page': page.object_list,
         'paginator': paginator,
-        'page': page
+        'page': page,
+        'user': request.user,
     })
 
+
+def change_password(request):
+    template_response = views.password_change(request)
+    # Do something with `template_response`
+    return template_response
+
+
+def logout(request):
+    django_logout(request)
+    return HttpResponseRedirect("/")
+
+
 def login(request):
-    return HttpResponse(request)
+    if request.method == "POST":
+        form = forms.AuthUserForm(request.POST)
+        if form.is_valid():
+            username = request.POST.get('username', None)
+            password = request.POST.get('password', None)
+            # url = request.POST.get('continue', '/')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    django_login(request, user)
+                    return HttpResponseRedirect("/")
+                else:
+                    return HttpResponse("Account disabled")
+            else:
+                return render(request, "user_login.html", {
+                    'form': form,
+                    'error': True
+                })
+    else:
+        form = forms.AuthUserForm()
+
+    return render(request, "user_login.html", {
+        'form': form,
+        'error': None
+        })
+
 
 def signup(request):
-    return HttpResponse(request)
+    if request.method == "POST":
+        print("Request POST:", request.POST)
+        form = forms.CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user:
+                return HttpResponseRedirect("/")
+            else:
+                return render(request, "user_new.html", {
+                    'form': form,
+                    'errors': ["User wasn't created"],
+                })
+    else:
+        form = forms.CreateUserForm()
+    return render(request, "user_new.html", {
+        'form': form,
+        'errors': form.errors,
+        })
 
-#@login_required
+
+@login_required
 def add_question(request):
     if request.method == "POST":
         # form = forms.AskForm(request.user, request.POST)
-        form = forms.AskForm(request.POST)
+        form = forms.AskForm(request.user, request.POST)
         if form.is_valid():
             question = form.save()
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        form = forms.AskForm()
+        form = forms.AskForm(request.user)
+
     return render(request, "question_add.html", {
         'form': form
     })
@@ -72,8 +136,8 @@ def add_question(request):
 def question_detail(request, qid):
     question = get_object_or_404(models.Question, id=qid)
     answers = models.Answer.objects.filter(question=qid)
-    if request.method == "POST":
-        form = forms.AnswerForm(request.POST, initial={'qid': question})
+    if request.method == "POST" and request.user.is_authenticated():
+        form = forms.AnswerForm(request.user, request.POST, initial={'qid': question})
         if form.is_valid():
             answer = form.save()
             url = answer.get_url()
@@ -81,7 +145,7 @@ def question_detail(request, qid):
         else:
             print("form.is_valid = FALSE")
     else:
-        form = forms.AnswerForm()
+        form = forms.AnswerForm(request.user)
 
     return render(request, "question_details.html", {
         'question': question,

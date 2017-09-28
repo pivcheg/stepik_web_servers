@@ -30,6 +30,25 @@ def paginate(request, queryset):
 
     return paginator, page
 
+# def login(request):
+#     error = ""
+#     if request.method == "POST":
+#         login = request.POST.get('login')
+#         password = request.POST.get('password')
+#         url = request.POST.get('continue', '/')
+#         sessid = models.do_login(login, password)
+#         if sessid:
+#             response = HttpResponseRedirect(url)
+#             response.set_cookie('sessid', sessid, domain='', httponly=True,
+#                                 expires=datetime.now()+timedelta(days=5)
+#                                 )
+#             return response
+#         else:
+#             error = "Неверный логин или пароль"
+#     return render(request, "login.html", {
+#         'error': error
+#     })
+
 
 def home(request):
     return questions_list_on_page(request)

@@ -24,28 +24,28 @@
         </div>
     </div>
 
-    {# <h4><a href="{% url 'add_comment' question.id %}">Написать комментарий</a></h4> #}
-    {# <h4><a href="{% url 'add_comment'  question.id %}?qid={{ question.id }}">Написать комментарий</a></h4> #}
-
     {% for e in form.non_field_errors %}
         <div class="alert alert-danger">{{ e }}</div>
     {% endfor %}
 
-    <form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
-        {% csrf_token %}
-        <fieldset>
-            {% for field in form %}
-                <div class="control-group {% if field.errors %}has-error{% endif %}">
-                    <label class="control-label">{{ field.label }}</label>
-                    <div class="controls">{{ field }}</div>
-                </div>
-            {% endfor %}
-        </fieldset>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Добавить комментарий</button>
-        </div>
-    </form>
-
+    {% if user.is_authenticated %}
+        <form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
+            {% csrf_token %}
+            <fieldset>
+                {% for field in form %}
+                    <div class="control-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label">{{ field.label }}</label>
+                        <div class="controls">{{ field }}</div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+            </div>
+        </form>
+    {% else %}
+        <p><font color="red">You can't leave comments. Please <a href="{% url 'login' %}">log in</a></font></p>
+    {% endif %}
 
     <div class="comments">
         {% for answer in answers %}
