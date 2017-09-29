@@ -120,16 +120,12 @@ def signup(request):
 @login_required
 def add_question(request):
     if request.method == "POST":
-        if request.user.is_authenticated():
-            # form = forms.AskForm(request.user, request.POST)
-            form = forms.AskForm(request.user, request.POST)
-            if form.is_valid():
-                question = form.save()
-                url = question.get_url()
-                # return HttpResponse("OK")
-                return HttpResponseRedirect(url)
-        else:
-            return HttpResponseRedirect("/login/") # Костыли для проверяющей системы
+        # form = forms.AskForm(request.user, request.POST)
+        form = forms.AskForm(request.user, request.POST)
+        if form.is_valid():
+            question = form.save()
+            url = question.get_url()
+            return HttpResponseRedirect(url)
     else:
         form = forms.AskForm(request.user)
 

@@ -71,23 +71,20 @@ class CreateUserForm(forms.Form):
     email = forms.CharField(widget=forms.EmailInput, required=False)
     password = forms.CharField(widget=forms.PasswordInput, required=False)
 
-    def __init__(self, *args, **kwargs):
-        super(CreateUserForm, self).__init__(*args, **kwargs)
-
-    def clean_username(self):
-        print("clean_username:", self.cleaned_data['username'])
-        username = self.cleaned_data['username']
-        return username
-
-    def clean_email(self):
-        print("clean_email:", self.cleaned_data['email'])
-        email = self.cleaned_data['email']
-        return email
-
-    def clean_password(self):
-        print("clean_password:", self.cleaned_data['password'])
-        password = self.cleaned_data['password']
-        return password
+    # def clean_username(self):
+    #     print("clean_username:", self.cleaned_data['username'])
+    #     username = self.cleaned_data['username']
+    #     return username
+    #
+    # def clean_email(self):
+    #     print("clean_email:", self.cleaned_data['email'])
+    #     email = self.cleaned_data['email']
+    #     return email
+    #
+    # def clean_password(self):
+    #     print("clean_password:", self.cleaned_data['password'])
+    #     password = self.cleaned_data['password']
+    #     return password
 
     def save(self):
         print("self.cleaned_data:", self.cleaned_data)
