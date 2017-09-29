@@ -1,9 +1,6 @@
-# from email.policy import HTTP
 # from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 # from django.views.decorators.http import require_GET
-# import django.contrib.sessions
-# from datetime import datetime, timedelta
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, Http404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage
@@ -133,7 +130,7 @@ def add_question(request):
         'form': form
     })
 
-#@require_GET
+
 def question_detail(request, qid):
     question = get_object_or_404(models.Question, id=qid)
     answers = models.Answer.objects.filter(question=qid)
@@ -154,10 +151,34 @@ def question_detail(request, qid):
         'form': form,
     })
 
+
 def popular_questions(request):
     questions = models.Question.objects.popular()
     return questions_list_on_page(request, questions, "questions_popular.html")
 
+
 def new_questions(request):
     questions = models.Question.objects.new()
     return questions_list_on_page(request, questions, "questions_new.html")
+
+
+def comments_list(request):
+    qid = request.Get.get('qid')
+    question = get_object_or_404(models.Question, qid)
+    comments = paginate(request, question.question)
+    return render(request, "comments.html", {
+        'comments': comments
+    })
+
+
+def allow_cors(origin_view):
+    def new_view(request, *args, **kwargs):
+        response = origin_view(request, *args, **kwargs)
+        origin = request.META.get('HTTP_ORIGIN')
+        if not origin:
+            return response
+        for domain in settings.CORS_WHITE_LIST:
+            if origin.endswith('.' + domain):
+                response['Access-Control-Allow-Origin'] = origin
+        return response
+    return new_view
