@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ block.super }} - главная
+{% endblock %}
+
+{% block content %}
+    <div class="question-actions">
+        <h5>
+            <a href="{% url 'popular_questions' %}">Популярные</a>
+            <a href="{% url 'new_questions' %}">Новые</a>
+            <a href="{% url 'add_question' %}">Задать вопрос</a>
+        </h5>
+    </div>
+    <nav>
+        <ul class="paginator">
+            {% for question in questions_on_page %}
+                <div class="question-header">
+                    <div class="question-date">
+                        <p>Опубликовано: {{ question.added_at }}</p>
+                    </div>
+                    <h1><a href="{% url 'question_details' question.id %}">{{ question }}</a></h1>
+                    <p>Автор: {{ question.author }}</p>
+                    <p>{{ question.text | linebreaksbr | truncatewords:10 }}</p>
+                </div>
+            {% endfor %}
+
+            <div class="questions-pages">
+                {% for p in paginator.page_range %}
+                    {% if p == page.number %}
+                        <li class="active">page {{ p }}
+                    {% else %}
+
+                        {% block pages %}
+                        <li><a href="/?page={{ p }}">page {{ p }}</a>
+                        {% endblock %}
+
+                    {% endif %}
+
+                        </li>
+                {% endfor %}
+            </div>
+
+        </ul>
+    </nav>
+{% endblock %}

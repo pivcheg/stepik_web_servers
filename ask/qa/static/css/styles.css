@@ -1,0 +1,52 @@
+body {
+    background-color: rgb(255, 255, 230);
+    padding-left: 15px;
+}
+
+h1, h2, h3, h4 {
+    color: rgb(220, 30, 30);
+    font-family: 'Lobster', cursive;
+}
+
+.question-date { color: #828282; }
+
+.save { float: right; }
+
+.post-form textarea, .post-form input {
+    width: 100%;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
+}
+
+.post { margin-bottom: 70px;}
+
+.post h1 a, .post h1 a:visited {
+    color: #000000;
+}
+
+.question-header {
+    background-color: #ffffc0;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
+
+.question-header h1, .question-header h1 a, .question-header h1 a:visited, .question-header h1 a:active {
+    color: rgb(0, 0, 200);
+    font-size: 20pt;
+    text-decoration: underline;
+}
+
+.question-content { margin-left: 40px;}
+
+
+#innovation {
+    position: absolute;
+    left: 90%;
+    z-index: -1;
+}
+

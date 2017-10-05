@@ -8,20 +8,18 @@
 
     <h1>{{ question.title }}</h1>
 
-    <div class="question_details">
+    <div class="question-details">
         <p>Автор: {{ question.author }}</p>
         <p>Вопрос: {{ question.text }}</p>
         <p>Время: {{ question.added_at }}</p>
         <p>Рейтинг: {{ question.rating }}</p>
-        <div class="likes">
-            <p>Понравилось:
-
-            {% for like in question.likes.all %}
-                {{ like }},
-            {% endfor %}
-
-            </p>
-        </div>
+    </div>
+    <div class="question-likes">
+        <p>Понравилось:
+        {% for like in question.likes.all %}
+            {{ like }},
+        {% endfor %}
+        </p>
     </div>
 
     {% for e in form.non_field_errors %}
@@ -47,7 +45,7 @@
         <p><font color="red">You can't leave comments. Please <a href="{% url 'login' %}">log in</a></font></p>
     {% endif %}
 
-    <div class="comments">
+    <div class="question-comments">
         {% for answer in answers %}
             <p>Автор комментария: {{ answer.author }}</p>
             <p>Комментарий: {{ answer.text }}</p>

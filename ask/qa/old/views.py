@@ -54,7 +54,7 @@ def home(request):
     return questions_list_on_page(request)
 
 def questions_list_on_page(request, questions_queryset=models.Question.objects.order_by('id'),
-                           template="questions_paginator.html"):
+                           template="questions_main.html"):
     """Функция принимает отсортированный queryset (если не указан, тогда сортирует по id),
     а затем разбивает его на страницы используя произвольные шаблоны"""
 

@@ -39,7 +39,7 @@ def home(request):
 
 
 def questions_list_on_page(request, questions_queryset=models.Question.objects.order_by('id'),
-                           template="questions_paginator.html"):
+                           template="questions_main.html"):
     """Функция принимает отсортированный queryset (если не указан, тогда сортирует по id),
     вызывает функцию paginate, разбивает вопросы на страницы и возвращает html текст
     используя переданный шаблон."""
