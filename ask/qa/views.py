@@ -11,6 +11,9 @@ from . import forms
 
 
 def paginate(request, queryset):
+    """Функция будет разбивать queryset на несколько страниц, если превышен заданный лимит на количество записей.
+    Возвращает объект пагинатор и текущую страницу. Если страница указана не верно, вернет последнию страницу."""
+
     try:
         limit = int(request.GET.get('limit', 10))
     except ValueError:
@@ -151,6 +154,22 @@ def question_detail(request, qid):
         'form': form,
     })
 
+def question_rating(request, qid):
+    # question = get_object_or_404(models.Question, id=qid)
+    if request.method == "POST" and request.user.is_authenticated():
+        form = forms.RatingForm(request.user, qid, request.post)
+        if form.is_valid():
+            rating = form.save()
+            url = rating.get_url()
+            return HttpResponseRedirect(url)
+        else:
+            print("form.is_valid = FALSE")
+    else:
+        form = forms.AnswerForm(request.user, qid)
+
+    return render(request, ".html", {
+        'xz': "xz"
+    })
 
 def popular_questions(request):
     questions = models.Question.objects.popular()

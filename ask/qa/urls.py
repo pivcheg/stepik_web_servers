@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     # url(r'^login/', views.user_login, {'template_name': 'login.html'}, name='user_login'),
     # url(r'^accounts/profile/', password_change, name='password_change'),
+    url(r'^$', views.home, name='home'),
     url(r'^login/', views.login, name='login'),
     url(r'^accounts/login/', views.login, name='login'),
     url(r'signup/', views.signup, name='signup'),

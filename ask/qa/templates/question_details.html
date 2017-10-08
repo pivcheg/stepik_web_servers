@@ -22,12 +22,9 @@
         </p>
     </div>
 
-    {% for e in form.non_field_errors %}
-        <div class="alert alert-danger">{{ e }}</div>
-    {% endfor %}
 
     {% if user.is_authenticated %}
-        <form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
+        <form class="form-comments" method="post" action="{% url 'question_details' question.id %}">
             {% csrf_token %}
             <fieldset>
                 {% for field in form %}

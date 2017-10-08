@@ -1,29 +1,33 @@
-{% extends "base.html" %}
+{% extends "question_details.html" %}
 
 {% block title %}
     {{ block.super }} - Спросить
 {% endblock %}
 
 
-{% block content %}
+{% block comments %}
 
 {% for e in form.non_field_errors %}
     <div class="alert alert-danger">{{ e }}</div>
 {% endfor %}
 
-<form class="form-horizontal" method="post" action="{% url 'add_comment' qid %}?qid={{ qid }}">
-    {% csrf_token %}
-    <fieldset>
-        {% for field in form %}
-            <div class="control-group {% if field.errors %}has-error{% endif %}">
-                <label class="control-label">{{ field.label }}</label>
-                <div class="controls">{{ field }}</div>
+    {% if user.is_authenticated %}
+        <form class="form-horizontal" method="post" action="{% url 'question_details' question.id %}">
+            {% csrf_token %}
+            <fieldset>
+                {% for field in form %}
+                    <div class="control-group {% if field.errors %}has-error{% endif %}">
+                        <label class="control-label">{{ field.label }}</label>
+                        <div class="controls">{{ field }}</div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Добавить комментарий</button>
             </div>
-        {% endfor %}
-    </fieldset>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Добавить комментарий</button>
-    </div>
-</form>
+        </form>
+    {% else %}
+        <p><font color="red">You can't leave comments. Please <a href="{% url 'login' %}">log in</a></font></p>
+    {% endif %}
 
 {% endblock %}

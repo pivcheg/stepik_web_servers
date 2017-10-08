@@ -1,8 +1,28 @@
 from django import forms
-# from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404
 # from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.db.utils import IntegrityError
 from . import models
+
+
+class RatingForm(forms.Form):
+    CHOICES = ((1, "Очень плохо"), (2, "Плохо"), (3, "Нормально"), (4, "Хорошо"), (5, "Отлично"))
+    rating = forms.ChoiceField(choices=CHOICES)
+
+    def __init__(self, user, qid, *args, **kwargs):
+        self._user = user
+        self._qid = qid
+        super(RatingForm, self).__init__(*args, **kwargs)
+
+    def clean_rating(self):
+        rating = self.cleaned_data['rating']
+        return rating
+
+    def save(self):
+        question = get_object_or_404(models.Question, id=self._qid)
+        rating = question.objects.set(rating=self.cleaned_data['rating'])
+        question.save()
+        return rating
 
 
 class AskForm(forms.Form):
@@ -24,7 +44,7 @@ class AskForm(forms.Form):
         return text
 
     def save(self):
-        print("Save:", self)
+        print("Save:", self.cleaned_data)
         question = models.Question(**self.cleaned_data)
         # question.author, _ = models.User.objects.get_or_create(username='anon')
         question.author = self._user
