@@ -42,7 +42,7 @@ def home(request):
 
 
 def questions_list_on_page(request, questions_queryset=models.Question.objects.order_by('id'),
-                           template="questions_main.html"):
+                           template="qa/questions_main.html"):
     """Функция принимает отсортированный queryset (если не указан, тогда сортирует по id),
     вызывает функцию paginate, разбивает вопросы на страницы и возвращает html текст
     используя переданный шаблон."""
@@ -82,14 +82,14 @@ def login(request):
                 else:
                     return HttpResponse("Account disabled")
             else:
-                return render(request, "user_login.html", {
+                return render(request, "qa/user_login.html", {
                     'form': form,
                     'error': True
                 })
     else:
         form = forms.AuthUserForm()
 
-    return render(request, "user_login.html", {
+    return render(request, "qa/user_login.html", {
         'form': form,
         'error': None
         })
@@ -105,13 +105,13 @@ def signup(request):
                 return login(request)
                 # return HttpResponseRedirect("/")
             else:
-                return render(request, "user_new.html", {
+                return render(request, "qa/user_new.html", {
                     'form': form,
                     'errors': ["User wasn't created"],
                 })
     else:
         form = forms.CreateUserForm()
-    return render(request, "user_new.html", {
+    return render(request, "qa/user_new.html", {
         'form': form,
         'errors': form.errors,
         })
@@ -129,7 +129,7 @@ def add_question(request):
     else:
         form = forms.AskForm(request.user)
 
-    return render(request, "question_add.html", {
+    return render(request, "qa/question_add.html", {
         'form': form
     })
 
@@ -148,7 +148,7 @@ def question_detail(request, qid):
     else:
         form = forms.AnswerForm(request.user)
 
-    return render(request, "question_details.html", {
+    return render(request, "qa/question_details.html", {
         'question': question,
         'answers': answers,
         'form': form,
@@ -173,19 +173,19 @@ def question_rating(request, qid):
 
 def popular_questions(request):
     questions = models.Question.objects.popular()
-    return questions_list_on_page(request, questions, "questions_popular.html")
+    return questions_list_on_page(request, questions, "qa/questions_popular.html")
 
 
 def new_questions(request):
     questions = models.Question.objects.new()
-    return questions_list_on_page(request, questions, "questions_new.html")
+    return questions_list_on_page(request, questions, "qa/questions_new.html")
 
 
 def comments_list(request):
     qid = request.Get.get('qid')
     question = get_object_or_404(models.Question, qid)
     comments = paginate(request, question.question)
-    return render(request, "comments.html", {
+    return render(request, "qa/comments.html", {
         'comments': comments
     })
 
