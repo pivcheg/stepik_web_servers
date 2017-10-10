@@ -9,7 +9,7 @@
     {% for question in question_list %}
     <div class="question">
         {# <a href="{{ question.build_url }}">{{ question }}</a> #}
-        <a href="{% url 'question_details' question.id %}">{{ question }}</a>
+        <a href="{% url 'qa:question_details' question.id %}">{{ question }}</a>
         {{ question.create_date|date:"d.m.y" }}
     </div>
     {% endfor %}

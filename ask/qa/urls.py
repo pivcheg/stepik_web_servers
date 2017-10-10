@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 # from django.contrib.auth.views import password_change
 
+app_name = "qa"
 urlpatterns = [
     # url(r'^login/', views.user_login, {'template_name': 'login.html'}, name='user_login'),
     # url(r'^accounts/profile/', password_change, name='password_change'),

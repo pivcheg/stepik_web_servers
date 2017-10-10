@@ -11,7 +11,7 @@
 {% endfor %}
 
 <div class="question-ask">
-    <form class="form-horizontal" method="post" action="/ask/">
+    <form class="form-horizontal" method="post" action="{% url 'qa:add_question' %}">
         {% csrf_token %}
         <fieldset>
             {% for field in form %}

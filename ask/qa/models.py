@@ -26,7 +26,7 @@ class Question(models.Model):
 
     def get_url(self):
         # return "/question/%d/" % self.id
-        return reverse('question_details', kwargs={'qid': self.id})
+        return reverse('qa:question_details', kwargs={'qid': self.id})
 
 
 class AnswerManager(models.Manager):
@@ -42,4 +42,4 @@ class Answer(models.Model):
 
     def get_url(self):
         # return "/question/%d/" % self.question.id
-        return reverse('question_details', kwargs={'qid': self.question.id})
+        return reverse('qa:question_details', kwargs={'qid': self.question.id})

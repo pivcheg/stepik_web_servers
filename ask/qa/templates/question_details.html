@@ -24,7 +24,7 @@
 
 
     {% if user.is_authenticated %}
-        <form class="form-comments" method="post" action="{% url 'question_details' question.id %}">
+        <form class="form-comments" method="post" action="{% url 'qa:question_details' question.id %}">
             {% csrf_token %}
             <fieldset>
                 {% for field in form %}
@@ -39,7 +39,7 @@
             </div>
         </form>
     {% else %}
-        <p><font color="red">You can't leave comments. Please <a href="{% url 'login' %}">log in</a></font></p>
+        <p><font color="red">You can't leave comments. Please <a href="{% url 'qa:login' %}">log in</a></font></p>
     {% endif %}
 
     <div class="question-comments">

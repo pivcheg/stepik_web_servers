@@ -7,9 +7,9 @@
 {% block content %}
     <div class="question-actions">
         <h5>
-            <a href="{% url 'popular_questions' %}">Популярные</a>
-            <a href="{% url 'new_questions' %}">Новые</a>
-            <a href="{% url 'add_question' %}">Задать вопрос</a>
+            <a href="{% url 'qa:popular_questions' %}">Популярные</a>
+            <a href="{% url 'qa:new_questions' %}">Новые</a>
+            <a href="{% url 'qa:add_question' %}">Задать вопрос</a>
         </h5>
     </div>
     <nav>
@@ -19,7 +19,7 @@
                     <div class="question-date">
                         <p>Опубликовано: {{ question.added_at }}</p>
                     </div>
-                    <h1><a href="{% url 'question_details' question.id %}">{{ question }}</a></h1>
+                    <h1><a href="{% url 'qa:question_details' question.id %}">{{ question }}</a></h1>
                     <p>Автор: {{ question.author }}</p>
                     <p>{{ question.text | linebreaksbr | truncatewords:10 }}</p>
                 </div>
