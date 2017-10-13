@@ -1,11 +1,12 @@
-# from django.core.urlresolvers import reverse
 # from django.views.decorators.http import require_GET
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, Http404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage
-from django.contrib.auth import views
-from django.contrib.auth import authenticate, login as django_login, logout as django_logout
+from django.contrib.auth import views, authenticate, login as django_login, logout as django_logout
+from django.views import generic
+
 from . import models
 from . import forms
 
@@ -190,14 +191,14 @@ def comments_list(request):
     })
 
 
-def allow_cors(origin_view):
-    def new_view(request, *args, **kwargs):
-        response = origin_view(request, *args, **kwargs)
-        origin = request.META.get('HTTP_ORIGIN')
-        if not origin:
-            return response
-        for domain in settings.CORS_WHITE_LIST:
-            if origin.endswith('.' + domain):
-                response['Access-Control-Allow-Origin'] = origin
-        return response
-    return new_view
+# def allow_cors(origin_view):
+#     def new_view(request, *args, **kwargs):
+#         response = origin_view(request, *args, **kwargs)
+#         origin = request.META.get('HTTP_ORIGIN')
+#         if not origin:
+#             return response
+#         for domain in settings.CORS_WHITE_LIST:
+#             if origin.endswith('.' + domain):
+#                 response['Access-Control-Allow-Origin'] = origin
+#         return response
+#     return new_view
