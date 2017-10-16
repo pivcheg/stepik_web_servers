@@ -1,7 +1,14 @@
+# TODO Улучшить наше приложение, покрыв всё тестами. Например, Questions не должен публиковаться, если у него нет Choices.
+# TODO Можно исключать такие опросы в представлении. Тест же может создать Question без Choices и проверить,
+# TODO что он не опубликован, а потом создать Question с Choices и проверить, что он отображается.
+# TODO Возможно, администраторы и должны иметь возможность видеть неопубликованные вопросы, но не обычные посетители.
+
 import datetime
+
 from django.test import TestCase
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+
 from .models import Question
 
 
