@@ -15,11 +15,6 @@ class IndexView(generic.ListView):
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        # questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
-        # try:
-        #     pass
-        # except Choice.DoesNotExist:
-
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
@@ -35,7 +30,7 @@ class DetailView(generic.DetailView):
 
         :return: QuerySet
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return Question.objects.filter(pub_date__lte=timezone.now(), pk=self.kwargs['pk'])
 
 
 class ResultsView(generic.DetailView):
@@ -50,7 +45,7 @@ class ResultsView(generic.DetailView):
 
         :return: QuerySet
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return Question.objects.filter(pub_date__lte=timezone.now(), pk=self.kwargs['pk'])
 
 
 def vote(request, question_id):

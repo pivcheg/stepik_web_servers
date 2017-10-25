@@ -106,11 +106,27 @@ class QuestionResultsTests(TestCase):
 
 
 class QuestionDetailTests(TestCase):
+    def test_detail_view_without_choice(self):
+        """
+        The detail view of a question without choices should return a 404 not found.
+        """
+        question_without_choice = create_question(question_text="Without choice", days=0)
+        response = self.client.get(reverse("polls:detail", args=(question_without_choice.id, )))
+        self.assertEqual(response.status_code, 404)
+
+    def test_detail_view_with_choice(self):
+        """
+        The detail view of a question with choices should return display the question.
+        """
+        question_with_choice = create_question(question_text="With choice", days=0)
+        question_with_choice.save()
+        question_with_choice.choice_set.create(choice_text="Pick me")
+        response = self.client.get(reverse("polls:detail", args=(question_with_choice.id, )))
+        self.assertContains(response, question_with_choice.question_text, status_code=200)
+
     def test_detail_view_with_a_future_question(self):
         """
         The detail view of a question with a pub_date in the future should return a 404 not found.
-
-        :return: None
         """
         future_question = create_question(question_text="Future question.", days=5)
         response = self.client.get(reverse("polls:detail", args=(future_question.id, )))
@@ -119,8 +135,6 @@ class QuestionDetailTests(TestCase):
     def test_detail_view_with_a_old_question(self):
         """
         The detail view of a question with a pub_date in the past should display the question's text.
-
-        :return: None
         """
         past_question = create_question(question_text="Past question.", days=-5)
         response = self.client.get(reverse("polls:detail", args=(past_question.id, )))
@@ -131,8 +145,6 @@ class QuestionMethodTests(TestCase):
     def test_was_published_recently_with_future_question(self):
         """
         was_published_recently() should return False for questions whose pub_date is in the future.
-
-        :return: None
         """
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
@@ -141,8 +153,6 @@ class QuestionMethodTests(TestCase):
     def test_was_published_recently_with_old_question(self):
         """
         was_published_recently() should return False for questions whose pub_date is older than 1 day.
-
-        :return: None
         """
         time = timezone.now() - datetime.timedelta(days=30)
         old_question = Question(pub_date=time)
@@ -151,9 +161,23 @@ class QuestionMethodTests(TestCase):
     def test_was_published_recently_recent_question(self):
         """
         was_published_recently() should return True for questions whose pub_date is within the last day.
-
-        :return: None
         """
         time = timezone.now() - datetime.timedelta(hours=1)
         recent_question = Question(pub_date=time)
         self.assertEqual(recent_question.was_published_recently(), True)
+
+    def test_has_choice_true(self):
+        """
+        has_choice should return True for question has choice
+        """
+        question = Question()
+        question.save()
+        question.choice_set.create()
+        self.assertEqual(question.has_choice(), True)
+
+    def test_has_choice_false(self):
+        """
+        has_choice should return False for question doesn't have choice
+        """
+        question = Question()
+        self.assertEqual(question.has_choice(), False)

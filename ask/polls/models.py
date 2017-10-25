@@ -23,6 +23,19 @@ class Question(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
+    def has_choice(self):
+        """
+        Проверяет есть ли у вопроса варианты ответов.
+
+        :return: bool
+        """
+        try:
+            self.choice_set.get(question=self.id)
+        except Choice.DoesNotExist:
+            return False
+        else:
+            return True
+
     was_published_recently.short_description = "Published recently?"
     was_published_recently.admin_order_field = "pub_date"
     was_published_recently.boolean = True
