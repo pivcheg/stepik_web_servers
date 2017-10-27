@@ -29,12 +29,11 @@ class Question(models.Model):
 
         :return: bool
         """
-        try:
-            self.choice_set.get(question=self.id)
-        except Choice.DoesNotExist:
-            return False
-        else:
+        choices = self.choice_set.filter(question=self.id)
+        if choices:
             return True
+        else:
+            return False
 
     was_published_recently.short_description = "Published recently?"
     was_published_recently.admin_order_field = "pub_date"
@@ -45,7 +44,6 @@ class Choice(models.Model):
     """
     Модель для создания вариантов ответов на вопрос.
     """
-
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)

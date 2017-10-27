@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
@@ -16,6 +16,7 @@ class IndexView(generic.ListView):
         published in the future).
         """
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+        #return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())[:5]
 
 
 class DetailView(generic.DetailView):
@@ -27,10 +28,15 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
-
-        :return: QuerySet
         """
-        return Question.objects.filter(pub_date__lte=timezone.now(), pk=self.kwargs['pk'])
+        print("DetailView:", self.kwargs)
+        #return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
+        question = Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
+        if question:
+            question = question[0]
+        print(question)
+        #return Question.objects.filter(pub_date__lte=timezone.now())
+        return question
 
 
 class ResultsView(generic.DetailView):
@@ -42,10 +48,9 @@ class ResultsView(generic.DetailView):
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
-
-        :return: QuerySet
         """
-        return Question.objects.filter(pub_date__lte=timezone.now(), pk=self.kwargs['pk'])
+        print("ResultsView:", self.kwargs)
+        return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
 
 
 def vote(request, question_id):
