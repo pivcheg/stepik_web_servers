@@ -39,6 +39,10 @@ class Question(models.Model):
     was_published_recently.admin_order_field = "pub_date"
     was_published_recently.boolean = True
 
+    has_choice.short_description = "Have choices?"
+    # has_choice.admin_order_field = "Published recently?"
+    has_choice.boolean = True
+
 
 class Choice(models.Model):
     """

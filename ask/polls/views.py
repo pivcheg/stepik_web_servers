@@ -29,13 +29,10 @@ class DetailView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        print("DetailView:", self.kwargs)
-        #return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
         question = Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
         if question:
-            question = question[0]
-        print(question)
-        #return Question.objects.filter(pub_date__lte=timezone.now())
+              question = Question.objects.filter(pk=self.kwargs['pk'])
+
         return question
 
 
@@ -49,8 +46,11 @@ class ResultsView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        print("ResultsView:", self.kwargs)
-        return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
+        question = Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())
+        if question:
+              question = Question.objects.filter(pk=self.kwargs['pk'])
+
+        return question
 
 
 def vote(request, question_id):

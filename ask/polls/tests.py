@@ -138,10 +138,9 @@ class QuestionDetailTests(TestCase):
         The detail view of a question with a pub_date in the past should display the question's text.
         """
         past_question = create_question(question_text="Past question.", days=-5)
+        past_question.choice_set.create(choice_text="Choice one")
         response = self.client.get(reverse("polls:detail", kwargs=({'pk': past_question.id} )))
-        past_question.choice_set.create()
-        #self.assertContains(response, past_question.question_text, status_code=200)
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, past_question.question_text, status_code=200)
 
 
 class QuestionMethodTests(TestCase):
