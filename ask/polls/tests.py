@@ -38,13 +38,27 @@ class QuestionViewTests(TestCase):
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_questions_list'], [])
 
+    def test_index_view_with_questions_without_choices(self):
+        """
+        If questions don't have choices, they shouldn't be displayed on index page.
+
+        :return: None
+        """
+        create_question(question_text="Question without choices.", days=-1)
+        response = self.client.get(reverse("polls:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No polls are available.")
+        self.assertQuerysetEqual(response.context['latest_questions_list'], [])
+
     def test_index_view_with_a_past_question(self):
         """
         Questions with a pub_date in the past should be displayed on the index page.
 
         :return: None
         """
-        create_question(question_text="Past question.", days=-30)
+        past_question = create_question(question_text="Past question.", days=-30)
+        past_question.save()
+        past_question.choice_set.create(choice_text="Past choice")
         response = self.client.get(reverse("polls:index"))
         self.assertQuerysetEqual(response.context['latest_questions_list'], ['<Question: Past question.>'])
 
@@ -65,8 +79,12 @@ class QuestionViewTests(TestCase):
 
         :return: None
         """
-        create_question(question_text="Past question.", days=-30)
-        create_question(question_text="Future question.", days=30)
+        past_question = create_question(question_text="Past question.", days=-30)
+        past_question.save()
+        past_question.choice_set.create(choice_text="Past choice")
+        future_question = create_question(question_text="Future question.", days=30)
+        future_question.save()
+        future_question.choice_set.create(choice_text="Future choice")
         response = self.client.get(reverse("polls:index"))
         self.assertQuerysetEqual(response.context['latest_questions_list'], ['<Question: Past question.>'])
 
@@ -76,8 +94,13 @@ class QuestionViewTests(TestCase):
 
         :return: None
         """
-        create_question(question_text="Past question 1.", days=-30)
-        create_question(question_text="Past question 2.", days=-5)
+        past_question_1 = create_question(question_text="Past question 1.", days=-30)
+        past_question_1.save()
+        past_question_1.choice_set.create(choice_text="Past choice 1")
+
+        past_question_2 = create_question(question_text="Past question 2.", days=-5)
+        past_question_2.save()
+        past_question_2.choice_set.create(choice_text="Past choice 1")
         response = self.client.get(reverse("polls:index"))
         self.assertQuerysetEqual(response.context['latest_questions_list'],
                                  ['<Question: Past question 2.>', '<Question: Past question 1.>'])

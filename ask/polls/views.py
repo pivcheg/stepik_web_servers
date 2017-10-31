@@ -16,11 +16,9 @@ class IndexView(generic.ListView):
         published in the future).
         """
         questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
-        print(questions)
         for question in questions:
             if not question.has_choice():
                 questions = questions.exclude(pk=question.id)
-        print(questions)
         return questions[:5]
 
 
