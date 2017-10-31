@@ -15,8 +15,13 @@ class IndexView(generic.ListView):
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
-        #return Question.objects.filter(choice__question=self.kwargs['pk'], pub_date__lte=timezone.now())[:5]
+        questions = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
+        print(questions)
+        for question in questions:
+            if not question.has_choice():
+                questions = questions.exclude(pk=question.id)
+        print(questions)
+        return questions[:5]
 
 
 class DetailView(generic.DetailView):
